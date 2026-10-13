@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Academic Advisor</title>
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  <link rel="preload" href="/static/fonts/Rajdhani-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/Rajdhani-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/Inter-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/Inter-500.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/JetBrainsMono-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<canvas id="particles" aria-hidden="true"></canvas>
+
+<header class="topbar">
+  <span class="glyph" aria-hidden="true"><i></i></span>
+  <p class="brand">Academic Advisor</p>
+  <span class="model-readout" id="model-badge">loading model…</span>
+  <button id="theme-toggle" class="btn icon-btn" type="button" aria-label="Switch to light theme">
+    <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1M12 8a4 4 0 100 8 4 4 0 000-8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13.5A8 8 0 1110.5 4 6.5 6.5 0 0020 13.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+</header>
+
+<main class="page">
+  <h1 class="page-title">Academic Advisor</h1>
+
+  <div class="layout">
+    <!-- LEFT: input -->
+    <div class="col">
+      <section class="window" style="--i:0">
+        <b class="corner tl"></b><b class="corner tr"></b><b class="corner bl"></b><b class="corner br"></b>
+        <header class="win-head">
+          <i class="tick" aria-hidden="true"></i>
+          <h2>Your profile</h2>
+        </header>
+        <div class="win-body">
+          <p class="helper">Enter your results so far. The system predicts how you are likely to do in each course next semester.</p>
+          <div class="field">
+            <label for="jamb">JAMB / UTME score</label>
+            <input id="jamb" type="number" min="100" max="400" value="230">
+          </div>
+          <div class="field">
+            <div class="range-row"><label for="hours">Study hours per week</label><output id="hours-out">12</output></div>
+            <input id="hours" type="range" min="0" max="40" step="1" value="12">
+          </div>
+          <div class="field">
+            <div class="range-row"><label for="att">Class attendance</label><output id="att-out">85%</output></div>
+            <input id="att" type="range" min="40" max="100" step="1" value="85">
+          </div>
+        </div>
+      </section>
+
+      <section class="window" style="--i:1">
+        <b class="corner tl"></b><b class="corner tr"></b><b class="corner bl"></b><b class="corner br"></b>
+        <header class="win-head">
+          <i class="tick" aria-hidden="true"></i>
+          <h2>Completed results</h2>
+          <span class="win-meta" id="rows-count">00 COURSES</span>
+        </header>
+        <div class="win-body">
+          <p class="helper">Add each course you have finished with your score out of 100.</p>
+          <div class="adder">
+            <select id="course-select" aria-label="Course"></select>
+            <input id="score-input" type="number" min="0" max="100" placeholder="Score" aria-label="Score">
+            <button id="add-btn" class="btn" type="button">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+              Add
+            </button>
+          </div>
+          <div class="adder-sem">
+            <select id="sem-select" aria-label="Semester"></select>
+            <button id="add-sem-btn" class="btn" type="button">Add core courses</button>
+          </div>
+          <div id="grade-chart" class="hidden"></div>
+          <div class="table-scroll"><div id="rows"></div></div>
+          <div id="error" class="error-box hidden" role="alert">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4L2.5 20h19L12 4zm0 6v4m0 3v.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+            <span></span>
+          </div>
+          <div class="actions">
+            <button id="advise-btn" class="btn primary" type="button">Get advice</button>
+            <button id="sample-btn" class="btn" type="button">Load sample student</button>
+            <button id="clear-btn" class="btn" type="button">Clear</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- RIGHT: output -->
+    <section class="window" id="output" style="--i:2" aria-live="polite">
+      <b class="corner tl"></b><b class="corner tr"></b><b class="corner bl"></b><b class="corner br"></b>
+      <header class="win-head">
+        <i class="tick" aria-hidden="true"></i>
+        <h2 id="output-title">Predictions</h2>
+        <span class="win-meta" id="output-meta"></span>
+      </header>
+      <div class="win-body" id="output-body"></div>
+    </section>
+  </div>
+
+  <p class="foot">This tool is trained on a synthetic dataset built from the Computer Science course list. Predictions are estimates for guidance, not a replacement for your course adviser.</p>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

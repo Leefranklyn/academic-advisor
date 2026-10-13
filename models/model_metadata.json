@@ -1,0 +1,60 @@
+{
+  "model": "Logistic Regression",
+  "classes": [
+    "At Risk",
+    "Average",
+    "Strong"
+  ],
+  "features": [
+    "jamb_score",
+    "level",
+    "semester",
+    "units",
+    "is_elective",
+    "category",
+    "study_hours",
+    "attendance",
+    "prior_cgpa",
+    "prior_semester_gpa",
+    "prior_avg_score",
+    "courses_failed_so_far",
+    "courses_taken_so_far",
+    "category_avg_prior",
+    "has_category_history",
+    "prereq_avg_score",
+    "has_prereqs"
+  ],
+  "categorical": [
+    "category"
+  ],
+  "numeric": [
+    "jamb_score",
+    "level",
+    "semester",
+    "units",
+    "is_elective",
+    "study_hours",
+    "attendance",
+    "prior_cgpa",
+    "prior_semester_gpa",
+    "prior_avg_score",
+    "courses_failed_so_far",
+    "courses_taken_so_far",
+    "category_avg_prior",
+    "has_category_history",
+    "prereq_avg_score",
+    "has_prereqs"
+  ],
+  "metrics": {
+    "accuracy": 0.6673,
+    "macro_f1": 0.6556,
+    "cv_macro_f1": {
+      "Logistic Regression": 0.6363,
+      "Random Forest": 0.6291,
+      "Gradient Boosting": 0.6336
+    }
+  },
+  "sklearn_version": "1.8.0",
+  "train_rows": 16535,
+  "test_rows": 4250
+}

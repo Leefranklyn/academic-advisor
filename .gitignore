@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.env
+.DS_Store
+# the trained model (models/*.pkl) is committed on purpose, the deployed app needs it

@@ -1,0 +1,15 @@
+# Taste
+- Hard bans in any UI work: gradients (backgrounds, buttons, text, borders), glassmorphism/backdrop-filter/blur, glow blobs / neon glow / large soft shadows, pill shapes and large rounded corners, purple-to-blue, emoji used as icons, eyebrow labels (small uppercase text above headings), and centered hero + tagline + two buttons layouts. Confidence: 0.95
+- Signature aesthetic: flat monochrome "system window" UI (Solo Leveling style) — sharp corners (radius 0 on panels, 2px on controls), 1px borders, corner brackets on cards, title bars with a small accent tick, mono readouts, dark + light themes switched via a `data-theme` attribute on `<html>`. Confidence: 0.9
+- Flat must not mean plain: expects rich, crafted detail (corner brackets, segmented meters, mono readouts, table grade squares) inside the flat style. Confidence: 0.85
+- Wants charts/graphs woven into UIs wherever the data supports them ("add elements like charts, graphs where applicable") — e.g. bar charts of predicted-band counts, grade-letter distribution histograms — not just raw tables/numbers. Confidence: 0.8
+- Accent colors are semantic and sparing over a neutral base: azure for focus/active/primary, gold for warnings/at-risk/failing, a third accent (lavender) for suggestions/secondary surfaces; everything else neutral. Never rely on color alone — pair it with text. Confidence: 0.85
+- Fonts: Rajdhani for headings/big numbers, Inter for body, JetBrains Mono for data with tabular numerals; self-host fonts and always give fallback stacks. Confidence: 0.85
+- Restrained motion: 120–220ms, cubic-bezier(.2,.7,.2,1), staggered reveals, count-ups; always honor prefers-reduced-motion. Confidence: 0.8
+- Theme toggling done properly: default dark, honor saved localStorage choice then prefers-color-scheme, set theme via inline head script before CSS paints so there is no flash. Confidence: 0.8
+- When given a detailed spec, follow it literally and exactly — do not reinterpret, simplify, or invent a new look ("Follow this spec literally. It is detailed on purpose."). Confidence: 0.9
+- When a style source of truth exists (e.g. their portfolio at https://godman-adaoche.pages.dev or another project's Tailwind config/CSS), extract and reuse its exact tokens/component styles instead of approximating. Confidence: 0.85
+- Preserve behavior when restyling front ends: keep every element id, keep every API call, and keep the test suite passing (pytest must still pass). Confidence: 0.9
+- Verify UI changes with concrete evidence: before/after screenshots of both themes, grep for banned patterns (e.g. "gradient", "backdrop-filter"), and responsive checks at defined widths (360/768/1280). Proactively deliver the screenshots. Confidence: 0.85
+- Accessibility expectations: ≥4.5:1 text contrast in both themes, visible focus on every control, ≥40px touch targets, aria-live on dynamic regions and role="alert" on errors. Confidence: 0.85
+- Icons: inline SVG only (thin stroke, square caps, ~18px); no emoji and no icon fonts. Confidence: 0.95
